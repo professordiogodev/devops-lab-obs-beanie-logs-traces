@@ -1,0 +1,3 @@
+# TODO: a Loki data source (uid: loki, url http://loki:3100) with a derived field so a log line links to its trace:
+#   jsonData.derivedFields: name TraceID, matcherRegex that matches the trace_id in a real log line (look at one: mind the spaces), url ${__value.raw}, datasourceUid tempo, urlDisplayLabel "View trace"
+# Docs: https://grafana.com/docs/grafana/latest/datasources/loki/configure-loki-data-source/

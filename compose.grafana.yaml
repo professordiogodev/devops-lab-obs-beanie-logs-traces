@@ -1,0 +1,15 @@
+# PROVIDED. Grafana, ready for the data sources you will provision. Start together with the other files.
+name: beanie-lt
+services:
+  grafana:
+    image: grafana/grafana:11.3.1
+    ports: ["3000:3000"]
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: beanie-lab
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+volumes:
+  grafana-data:

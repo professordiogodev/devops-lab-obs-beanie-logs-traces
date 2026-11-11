@@ -1,0 +1,62 @@
+# PROVIDED. Beanie as five containers from one image, plus a trickle of traffic. Read it, do not change it.
+name: beanie-lt
+services:
+  gateway:
+    image: beanie:0.1.0
+    build: .
+    command: ["gateway"]
+    environment: &common
+      MENU_URL: http://menu:8001
+      ORDERS_URL: http://orders:8002
+      PAYMENTS_URL: http://payments:8003
+      NOTIFICATIONS_URL: http://notifications:8004
+      CHAOS_ENABLED: "true"
+      LOG_FORMAT: json
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_ENDPOINT:-}
+    ports: ["8000:8000"]
+    depends_on: [menu, orders]
+    restart: unless-stopped
+  menu:
+    image: beanie:0.1.0
+    command: ["menu"]
+    environment: *common
+    restart: unless-stopped
+  orders:
+    image: beanie:0.1.0
+    command: ["orders"]
+    environment: *common
+    depends_on: [menu, payments, notifications]
+    restart: unless-stopped
+  payments:
+    image: beanie:0.1.0
+    command: ["payments"]
+    environment: *common
+    restart: unless-stopped
+  notifications:
+    image: beanie:0.1.0
+    command: ["notifications"]
+    environment: *common
+    restart: unless-stopped
+  traffic:
+    image: beanie:0.1.0
+    entrypoint: ["python", "-c"]
+    command:
+      - |
+        import json, threading, time, urllib.request
+        GW = "http://gateway:8000"
+        ORDER = json.dumps({"customer": "load", "items": [{"item_id": "flat-white", "quantity": 1}]}).encode()
+        def menu():
+            while True:
+                try: urllib.request.urlopen(GW + "/api/menu", timeout=5).read()
+                except Exception: pass
+                time.sleep(0.4)
+        def order():
+            while True:
+                try: urllib.request.urlopen(urllib.request.Request(GW + "/api/orders", ORDER, {"Content-Type": "application/json"}), timeout=10).read()
+                except Exception: pass
+                time.sleep(0.5)
+        for f in (menu, menu, order):
+            threading.Thread(target=f, daemon=True).start()
+        threading.Event().wait()
+    depends_on: [gateway]
+    restart: unless-stopped

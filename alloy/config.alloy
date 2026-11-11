@@ -1,0 +1,8 @@
+// TODO: a log pipeline in the Alloy syntax (https://grafana.com/docs/alloy/latest/reference/components/).
+//
+//   1. discovery.docker    find the containers through unix:///var/run/docker.sock, only those of the Compose project beanie-lt
+//   2. discovery.relabel   turn the Compose service name (__meta_docker_container_label_com_docker_compose_service) into a label `service`
+//   3. loki.source.docker  read the logs of those containers
+//   4. loki.process        Beanie logs one JSON object per line. Extract level, request_id and trace_id with stage.json,
+//                          and make ONLY `level` a Loki label (stage.labels). request_id and trace_id stay in the line.
+//   5. loki.write          send to http://loki:3100/loki/api/v1/push

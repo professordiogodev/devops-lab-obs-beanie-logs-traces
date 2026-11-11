@@ -1,0 +1,11 @@
+# TODO: the observability back end, started together with the provided files:
+#     docker compose -f compose.beanie.yaml -f compose.grafana.yaml -f compose.observability.yaml up -d
+#
+#   loki            grafana/loki:3.2.1             port 3100:3100, command -config.file=/etc/loki/loki.yaml, ./loki mounted at /etc/loki (ro), a named volume at /loki
+#   tempo           grafana/tempo:2.6.1            port 3200:3200, command -config.file=/etc/tempo/tempo.yaml, ./tempo mounted at /etc/tempo (ro), a named volume at /var/tempo
+#   otel-collector  otel/opentelemetry-collector-contrib:0.113.0
+#                                                  command --config=/etc/otel/collector.yaml, ./otel mounted at /etc/otel (ro); depends on tempo
+#   alloy           grafana/alloy:v1.4.3           command run --server.http.listen-addr=0.0.0.0:12345 /etc/alloy/config.alloy
+#                                                  ./alloy mounted at /etc/alloy (ro) and /var/run/docker.sock (ro): it reads the logs of the other containers through the Docker API
+#                                                  depends on loki
+# The project name is beanie-lt in every file; restart policy unless-stopped.
