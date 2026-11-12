@@ -22,11 +22,15 @@
 
 ## 🎬 The situation
 
-<p align="center"><img src="assets/gifs/situation.gif" width="300" alt="Animation: {service=&quot;orders&quot;} | json"></p>
+<p align="center"><img src="assets/gifs/situation.gif" width="300" alt="A request crossing services with the log lines and trace spans joined by an id"></p>
 
-A customer writes: *"I ordered a flat white at 10:42, the page hung for a long time, then it said my payment failed. I was charged anyway?"* Behind that one sentence there are five services, a database and a payment provider. Your dashboard says the error rate is fine. Your metrics tell you that **something** is slower than usual, but not **which request**, not **which service** and not **why**.
+> *"I ordered a flat white at 10:42, the page hung for a long time, then it said my payment failed. I was charged anyway?"*
+>
+> - a customer, by e-mail
 
-Metrics answer "is it broken, and how much?". To answer "what happened to *this* request?" you need the other two signals: **logs** (what each service said while handling it) and **traces** (the path of the request through the services, with the time spent in each). Today you build the pipeline for both and join them by one identifier, so that from a single log line you can open the trace, and from a slow span you can open the logs.
+Behind that one sentence are five services, a database and a payment provider. Your dashboard says the error rate is fine. Your metrics say **something** is slower than usual, but not **which request**, **which service** or **why**.
+
+Metrics answer *"is it broken, and how much?"*. To answer *"what happened to this request?"* you need the other two signals: **logs** (what each service said while handling it) and **traces** (the path of the request through the services, with the time spent in each). Today you build the pipeline for both and join them by one identifier, so that from a log line you can open the trace and from a slow span you can open the logs. The customer gets an answer at the end.
 
 > [!IMPORTANT]
 > **Your mission**
